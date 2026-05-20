@@ -14,6 +14,9 @@
     --white: #ffffff;
     --dark-text: #2d3748;
     --light-text: #718096;
+    --category-electrical-theory: #3182ce;
+    --category-electrical-machine: #d69e2e;
+    --category-electrical-equipment: #c53030;
 }
 
 body {
@@ -27,6 +30,41 @@ body {
 .container {
     max-width: 800px;
     margin: 0 auto;
+}
+
+/* 카테고리 선택 */
+.category-section {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideUp 0.6s ease-out both;
+}
+
+.category-section label {
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+.category-section select {
+    padding: 8px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--light-bg);
+    color: var(--dark-text);
+}
+
+.category-section select:hover,
+.category-section select:focus {
+    border-color: var(--primary-color);
+    outline: none;
 }
 
 /* 헤더 */
@@ -107,6 +145,42 @@ body {
     font-weight: 600;
     margin-bottom: 20px;
     font-size: 0.9rem;
+}
+
+.question-number.electrical-theory {
+    background: linear-gradient(135deg, #3182ce, #2c5aa0);
+}
+
+.question-number.electrical-machine {
+    background: linear-gradient(135deg, #d69e2e, #b7791f);
+}
+
+.question-number.electrical-equipment {
+    background: linear-gradient(135deg, #c53030, #9b2c2c);
+}
+
+.category-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    font-weight: 600;
+}
+
+.category-badge.electrical-theory {
+    background: rgba(49, 130, 206, 0.2);
+    color: #3182ce;
+}
+
+.category-badge.electrical-machine {
+    background: rgba(214, 158, 46, 0.2);
+    color: #d69e2e;
+}
+
+.category-badge.electrical-equipment {
+    background: rgba(197, 48, 48, 0.2);
+    color: #c53030;
 }
 
 .question-text {

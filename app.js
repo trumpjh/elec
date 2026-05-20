@@ -22,11 +22,16 @@ const finalScoreEl = document.getElementById('finalScore');
 const scorePercentEl = document.getElementById('scorePercent');
 const restartBtn = document.getElementById('restartBtn');
 
+// 전역 변수 (추가)
+let allQuestions = [];
+let currentCategory = 'all';
+
 // 페이지 로드
 document.addEventListener('DOMContentLoaded', async () => {
     await loadQuestions();
     displayQuestion();
     setupEventListeners();
+    setupCategoryFilter();
 });
 
 // 문제 로드
@@ -34,12 +39,42 @@ async function loadQuestions() {
     try {
         const response = await fetch('questions.json');
         const data = await response.json();
-        questions = data.questions;
+        allQuestions = data.questions;
+        questions = allQuestions;
         totalQuestionsEl.textContent = questions.length;
     } catch (error) {
         console.error('문제 로드 실패:', error);
         questionTextEl.textContent = '문제를 로드할 수 없습니다.';
     }
+}
+
+// 카테고리 필터 설정
+function setupCategoryFilter() {
+    const categorySelect = document.getElementById('categorySelect');
+    categorySelect.addEventListener('change', (e) => {
+        currentCategory = e.target.value;
+        filterQuestionsByCategory();
+    });
+}
+
+// 카테고리별 필터링
+function filterQuestionsByCategory() {
+    if (currentCategory === 'all') {
+        questions = allQuestions;
+    } else {
+        questions = allQuestions.filter(q => q.category === currentCategory);
+    }
+    
+    currentQuestionIndex = 0;
+    selectedAnswer = null;
+    score = 0;
+    answered = false;
+    
+    totalQuestionsEl.textContent = questions.length;
+    document.querySelector('.completion-section').style.display = 'none';
+    document.querySelector('.progress-section').style.display = 'block';
+    
+    displayQuestion();
 }
 
 // 문제 표시
@@ -53,8 +88,16 @@ function displayQuestion() {
     answered = false;
     selectedAnswer = null;
 
-    // 문제 번호
+    // 문제 번호 및 카테고리 배지
+    const categoryClass = question.category.replace(/\s+/g, '-');
     questionNumberEl.textContent = `문제 ${question.number}`;
+    questionNumberEl.className = `question-number ${categoryClass}`;
+    
+    // 카테고리 배지 추가
+    const badge = document.createElement('span');
+    badge.className = `category-badge ${categoryClass}`;
+    badge.textContent = question.category;
+    questionNumberEl.appendChild(badge);
 
     // 문제 텍스트
     questionTextEl.textContent = question.question + '?';
@@ -153,9 +196,19 @@ function showResult(isCorrect, question) {
 
     // 정답 표시
     const correctOptionLabel = getOptionLabel(question.answer);
+    const categoryClass = question.category.replace(/\s+/g, '-');
     let resultHTML = `
         <strong>정답:</strong> ${correctOptionLabel}. ${question.options[question.answer]}
     `;
+
+    // 단원명 표시
+    if (question.category) {
+        resultHTML += `
+            <div style="margin-top: 10px;">
+                <span class="category-badge ${categoryClass}">${question.category}</span>
+            </div>
+        `;
+    }
 
     // 설명 추가
     if (question.explanation && question.explanation.trim()) {

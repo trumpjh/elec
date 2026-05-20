@@ -145,9 +145,9 @@ function selectOption(index, optionDiv) {
     optionDiv.querySelector('input[type="radio"]').checked = true;
 }
 
-// 선택지 라벨 (①②③④)
+// 선택지 라벨 (1, 2, 3, 4)
 function getOptionLabel(index) {
-    return String.fromCharCode(9312 + index);
+    return index + 1;
 }
 
 // 이벤트 리스너 설정

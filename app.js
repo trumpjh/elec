@@ -153,9 +153,21 @@ function showResult(isCorrect, question) {
 
     // 정답 표시
     const correctOptionLabel = getOptionLabel(question.answer);
-    correctAnswerEl.innerHTML = `
+    let resultHTML = `
         <strong>정답:</strong> ${correctOptionLabel}. ${question.options[question.answer]}
     `;
+
+    // 설명 추가
+    if (question.explanation && question.explanation.trim()) {
+        resultHTML += `
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #cbd5e0;">
+                <strong>설명:</strong>
+                <p style="margin-top: 8px; line-height: 1.6;">${question.explanation}</p>
+            </div>
+        `;
+    }
+
+    correctAnswerEl.innerHTML = resultHTML;
 
     // 스크롤
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

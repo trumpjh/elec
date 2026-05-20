@@ -109,7 +109,7 @@ function displayQuestion() {
         optionDiv.className = 'option';
         optionDiv.innerHTML = `
             <input type="radio" id="option${index}" name="answer" value="${index}">
-            <label for="option${index}">${getOptionLabel(index)}. ${option}</label>
+            <label for="option${index}">${option}</label>
         `;
         optionDiv.addEventListener('click', () => selectOption(index, optionDiv));
         optionsContainer.appendChild(optionDiv);

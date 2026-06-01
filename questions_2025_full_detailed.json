@@ -1,8 +1,7 @@
 {
   "total": 70,
   "updated_date": "2025-06-01",
-  "version": "v4.0 - Complete with all detailed explanations",
-  "description": "2025년도 전기기사 문제 및 상세 설명 (70개 문제)",
+  "version": "v3.0 - Comprehensive detailed explanations",
   "questions": [
     {
       "number": 1,
@@ -421,7 +420,7 @@
       ],
       "answer": 3,
       "category": "전기이론",
-      "explanation": "부싱(Bushing):\n- 정의: 도체가 절연재료를 뚫고 지나갈 때 사용\n- 용도: 절연 보호, 부식 방지\n- 금속관 접속 시 필수\n- 금속 재질과 절연 재질 조합",
+      "explanation": "비사인파 = 직류성분 + 기본파성분 + 고조파성분",
       "exam": "2025년도 제2회 문제"
     },
     {

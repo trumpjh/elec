@@ -1,5 +1,6 @@
 // 전역 변수
 let questions = [];
+let examples = {};  // 문제번호 -> 설명 매핑
 let currentQuestionIndex = 0;
 let selectedAnswer = null;
 let score = 0;
@@ -22,48 +23,93 @@ const finalScoreEl = document.getElementById('finalScore');
 const scorePercentEl = document.getElementById('scorePercent');
 const restartBtn = document.getElementById('restartBtn');
 
-// 전역 변수 (추가)
+// 전역 변수
 let allQuestions = [];
 let currentCategory = 'all';
+let currentExam = 'all';
 
 // 페이지 로드
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadQuestions();
+    await loadData();
     displayQuestion();
     setupEventListeners();
     setupCategoryFilter();
+    setupExamFilter();
 });
 
-// 문제 로드
-async function loadQuestions() {
+// 데이터 로드 (questions.json + example.json)
+async function loadData() {
     try {
-        const response = await fetch('questions.json');
-        const data = await response.json();
-        allQuestions = data.questions;
+        // 1. questions.json 로드
+        const questionsResponse = await fetch('questions.json');
+        const questionsData = await questionsResponse.json();
+        allQuestions = questionsData.questions;
         questions = allQuestions;
+        
+        // 2. example.json 로드
+        const examplesResponse = await fetch('example.json');
+        const examplesData = await examplesResponse.json();
+        
+        // 문제번호별로 설명을 매핑
+        examplesData.examples.forEach(exp => {
+            examples[exp.problem_number] = exp;
+        });
+        
+        // 3. 문제에 설명 추가
+        questions.forEach(q => {
+            if (examples[q.number]) {
+                q.category = examples[q.number].category;
+                q.explanation = examples[q.number].explanation;
+            }
+        });
+        
         totalQuestionsEl.textContent = questions.length;
+        console.log(`✓ ${questions.length}개 문제 로드됨`);
+        console.log(`✓ ${Object.keys(examples).length}개 설명 로드됨`);
+        
     } catch (error) {
-        console.error('문제 로드 실패:', error);
-        questionTextEl.textContent = '문제를 로드할 수 없습니다.';
+        console.error('데이터 로드 실패:', error);
+        questionTextEl.textContent = '데이터를 로드할 수 없습니다.';
     }
 }
 
 // 카테고리 필터 설정
 function setupCategoryFilter() {
     const categorySelect = document.getElementById('categorySelect');
+    if (!categorySelect) return;
+    
     categorySelect.addEventListener('change', (e) => {
         currentCategory = e.target.value;
-        filterQuestionsByCategory();
+        applyFilters();
     });
 }
 
-// 카테고리별 필터링
-function filterQuestionsByCategory() {
-    if (currentCategory === 'all') {
-        questions = allQuestions;
-    } else {
-        questions = allQuestions.filter(q => q.category === currentCategory);
+// 회차 필터 설정
+function setupExamFilter() {
+    const examSelect = document.getElementById('examSelect');
+    if (!examSelect) return;
+    
+    examSelect.addEventListener('change', (e) => {
+        currentExam = e.target.value;
+        applyFilters();
+    });
+}
+
+// 필터 적용
+function applyFilters() {
+    let filtered = allQuestions;
+    
+    // 회차 필터
+    if (currentExam !== 'all') {
+        filtered = filtered.filter(q => q.exam === currentExam);
     }
+    
+    // 카테고리 필터
+    if (currentCategory !== 'all') {
+        filtered = filtered.filter(q => q.category === currentCategory);
+    }
+    
+    questions = filtered;
     
     currentQuestionIndex = 0;
     selectedAnswer = null;
@@ -88,16 +134,10 @@ function displayQuestion() {
     answered = false;
     selectedAnswer = null;
 
-    // 문제 번호 및 카테고리 배지
-    const categoryClass = question.category.replace(/\s+/g, '-');
+    // 문제 번호 및 카테고리
+    const categoryClass = question.category ? question.category.replace(/\s+/g, '-') : 'default';
     questionNumberEl.textContent = `문제 ${question.number}`;
     questionNumberEl.className = `question-number ${categoryClass}`;
-    
-    // 카테고리 배지 추가
-    const badge = document.createElement('span');
-    badge.className = `category-badge ${categoryClass}`;
-    badge.textContent = question.category;
-    questionNumberEl.appendChild(badge);
 
     // 문제 텍스트
     questionTextEl.textContent = question.question + '?';
@@ -145,11 +185,6 @@ function selectOption(index, optionDiv) {
     optionDiv.querySelector('input[type="radio"]').checked = true;
 }
 
-// 선택지 라벨 (1, 2, 3, 4)
-function getOptionLabel(index) {
-    return index + 1;
-}
-
 // 이벤트 리스너 설정
 function setupEventListeners() {
     submitBtn.addEventListener('click', checkAnswer);
@@ -195,11 +230,10 @@ function showResult(isCorrect, question) {
     }
 
     // 정답 표시
-    const correctOptionLabel = getOptionLabel(question.answer);
-    const categoryClass = question.category.replace(/\s+/g, '-');
-    let resultHTML = `
-        <strong>정답:</strong> ${correctOptionLabel}. ${question.options[question.answer]}
-    `;
+    const correctOptionLabel = question.answer + 1;
+    const categoryClass = question.category ? question.category.replace(/\s+/g, '-') : 'default';
+    
+    let resultHTML = `<strong>정답:</strong> ${correctOptionLabel}. ${question.options[question.answer]}`;
 
     // 단원명 표시
     if (question.category) {
@@ -210,12 +244,12 @@ function showResult(isCorrect, question) {
         `;
     }
 
-    // 설명 추가
+    // 설명 표시 (example.json에서 가져온 설명)
     if (question.explanation && question.explanation.trim()) {
         resultHTML += `
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #cbd5e0;">
                 <strong>설명:</strong>
-                <p style="margin-top: 8px; line-height: 1.6;">${question.explanation}</p>
+                <p style="margin-top: 8px; line-height: 1.6; white-space: pre-wrap;">${question.explanation}</p>
             </div>
         `;
     }
@@ -264,7 +298,10 @@ function restartQuiz() {
     // UI 초기화
     document.querySelector('.progress-section').style.display = 'block';
     completionSection.style.display = 'none';
-    document.querySelector('.quiz-container').innerHTML = `
+    
+    // 컨테이너 다시 구성
+    const quizContainer = document.querySelector('.quiz-container');
+    quizContainer.innerHTML = `
         <div class="question-card">
             <div class="question-number" id="questionNumber">문제 1</div>
             <div class="question-text" id="questionText">로딩 중...</div>
@@ -283,23 +320,24 @@ function restartQuiz() {
             <button class="btn btn-submit" id="submitBtn">채점하기</button>
             <button class="btn btn-next" id="nextBtn" style="display:none;">다음 문제</button>
         </div>
-
-        <div class="completion-section" id="completionSection" style="display:none;">
-            <h2>모든 문제를 풀었습니다! 🎉</h2>
-            <div class="final-score">
-                <p class="score-text">최종 성적</p>
-                <p class="score-number"><span id="finalScore">0</span> / ${questions.length}</p>
-                <p class="score-percent"><span id="scorePercent">0</span>%</p>
-            </div>
-            <button class="btn btn-restart" id="restartBtn">처음부터 시작</button>
-        </div>
     `;
-
+    
     // DOM 요소 재할당
-    document.getElementById('submitBtn').addEventListener('click', checkAnswer);
-    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
-    document.getElementById('restartBtn').addEventListener('click', restartQuiz);
-
-    // 첫 번째 문제 표시
+    const newSubmitBtn = document.getElementById('submitBtn');
+    const newNextBtn = document.getElementById('nextBtn');
+    
+    newSubmitBtn.addEventListener('click', checkAnswer);
+    newNextBtn.addEventListener('click', nextQuestion);
+    
+    // 전역 변수 업데이트
+    submitBtn = newSubmitBtn;
+    nextBtn = newNextBtn;
+    optionsContainer = document.getElementById('optionsContainer');
+    questionNumberEl = document.getElementById('questionNumber');
+    questionTextEl = document.getElementById('questionText');
+    resultSection = document.getElementById('resultSection');
+    resultMessage = document.getElementById('resultMessage');
+    correctAnswerEl = document.getElementById('correctAnswer');
+    
     displayQuestion();
 }

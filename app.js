@@ -143,6 +143,25 @@ class QuestionApp {
         document.getElementById('detailExam').textContent = q.exam;
         document.getElementById('detailQuestion').textContent = q.question;
 
+        // 문제 이미지 처리
+        const problemImageEl = document.getElementById('problemImage');
+        const problemImg = document.getElementById('problemImg');
+        if (q.image) {
+            problemImg.src = q.image;
+            problemImg.alt = `${q.exam} 문제 ${q.number} 이미지`;
+            
+            // 제4회 9번은 이미지 크기 2배로 설정
+            if (q.exam === '제4회' && q.number === 9) {
+                problemImg.style.maxHeight = '800px';
+            } else {
+                problemImg.style.maxHeight = '400px';
+            }
+            
+            problemImageEl.style.display = 'block';
+        } else {
+            problemImageEl.style.display = 'none';
+        }
+
         // 선택지
         q.options.forEach((option, idx) => {
             const optionEl = document.getElementById(`option${idx}`);

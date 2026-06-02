@@ -1,71 +1,49 @@
 // 전역 변수
-let questions = [];
-let examples = {};  // 문제번호 -> 설명 매핑
+let allQuestions = [];
+let filteredQuestions = [];
 let currentQuestionIndex = 0;
 let selectedAnswer = null;
 let score = 0;
 let answered = false;
+let currentCategory = 'all';
+let currentExam = 'all';
 
 // DOM 요소
-const questionNumberEl = document.getElementById('questionNumber');
-const questionTextEl = document.getElementById('questionText');
-const optionsContainer = document.getElementById('optionsContainer');
-const submitBtn = document.getElementById('submitBtn');
-const nextBtn = document.getElementById('nextBtn');
+let questionNumberEl = document.getElementById('questionNumber');
+let questionTextEl = document.getElementById('questionText');
+let optionsContainer = document.getElementById('optionsContainer');
+let submitBtn = document.getElementById('submitBtn');
+let nextBtn = document.getElementById('nextBtn');
 const progressFill = document.getElementById('progressFill');
 const currentQuestionEl = document.getElementById('currentQuestion');
-const totalQuestionsEl = document.getElementById('totalQuestions');
-const resultSection = document.getElementById('resultSection');
-const resultMessage = document.getElementById('resultMessage');
-const correctAnswerEl = document.getElementById('correctAnswer');
+let totalQuestionsEl = document.getElementById('totalQuestions');
+let resultSection = document.getElementById('resultSection');
+let resultMessage = document.getElementById('resultMessage');
+let correctAnswerEl = document.getElementById('correctAnswer');
 const completionSection = document.getElementById('completionSection');
 const finalScoreEl = document.getElementById('finalScore');
 const scorePercentEl = document.getElementById('scorePercent');
 const restartBtn = document.getElementById('restartBtn');
 
-// 전역 변수
-let allQuestions = [];
-let currentCategory = 'all';
-let currentExam = 'all';
-
 // 페이지 로드
 document.addEventListener('DOMContentLoaded', async () => {
     await loadData();
-    displayQuestion();
     setupEventListeners();
     setupCategoryFilter();
     setupExamFilter();
+    displayQuestion();
 });
 
-// 데이터 로드 (questions.json + example.json)
+// 데이터 로드 (integrated_questions.json)
 async function loadData() {
     try {
-        // 1. questions.json 로드
-        const questionsResponse = await fetch('questions.json');
-        const questionsData = await questionsResponse.json();
-        allQuestions = questionsData.questions;
-        questions = allQuestions;
+        const response = await fetch('integrated_questions.json');
+        const data = await response.json();
+        allQuestions = data.questions;
+        filteredQuestions = allQuestions;
         
-        // 2. example.json 로드
-        const examplesResponse = await fetch('example.json');
-        const examplesData = await examplesResponse.json();
-        
-        // 문제번호별로 설명을 매핑
-        examplesData.examples.forEach(exp => {
-            examples[exp.problem_number] = exp;
-        });
-        
-        // 3. 문제에 설명 추가
-        questions.forEach(q => {
-            if (examples[q.number]) {
-                q.category = examples[q.number].category;
-                q.explanation = examples[q.number].explanation;
-            }
-        });
-        
-        totalQuestionsEl.textContent = questions.length;
-        console.log(`✓ ${questions.length}개 문제 로드됨`);
-        console.log(`✓ ${Object.keys(examples).length}개 설명 로드됨`);
+        totalQuestionsEl.textContent = filteredQuestions.length;
+        console.log(`✓ ${filteredQuestions.length}개 문제 로드됨 (통합 파일)`);
         
     } catch (error) {
         console.error('데이터 로드 실패:', error);
@@ -109,51 +87,55 @@ function applyFilters() {
         filtered = filtered.filter(q => q.category === currentCategory);
     }
     
-    questions = filtered;
+    filteredQuestions = filtered;
     
     currentQuestionIndex = 0;
     selectedAnswer = null;
     score = 0;
     answered = false;
     
-    totalQuestionsEl.textContent = questions.length;
-    document.querySelector('.completion-section').style.display = 'none';
-    document.querySelector('.progress-section').style.display = 'block';
+    totalQuestionsEl.textContent = filteredQuestions.length;
+    completionSection.style.display = 'none';
     
     displayQuestion();
 }
 
 // 문제 표시
 function displayQuestion() {
-    if (currentQuestionIndex >= questions.length) {
+    if (currentQuestionIndex >= filteredQuestions.length) {
         showCompletionScreen();
         return;
     }
 
-    const question = questions[currentQuestionIndex];
+    const question = filteredQuestions[currentQuestionIndex];
     answered = false;
     selectedAnswer = null;
 
-    // 문제 번호 및 카테고리
-    const categoryClass = question.category ? question.category.replace(/\s+/g, '-') : 'default';
+    // 문제 번호
     questionNumberEl.textContent = `문제 ${question.number}`;
-    questionNumberEl.className = `question-number ${categoryClass}`;
 
     // 문제 텍스트
-    questionTextEl.textContent = question.question + '?';
+    questionTextEl.textContent = question.question;
 
     // 선택지
     optionsContainer.innerHTML = '';
-    question.options.forEach((option, index) => {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'option';
-        optionDiv.innerHTML = `
-            <input type="radio" id="option${index}" name="answer" value="${index}">
-            <label for="option${index}">${option}</label>
-        `;
-        optionDiv.addEventListener('click', () => selectOption(index, optionDiv));
-        optionsContainer.appendChild(optionDiv);
-    });
+    const symbols = ['①', '②', '③', '④'];
+    
+    if (question.options && question.options.length > 0) {
+        question.options.forEach((option, index) => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option';
+            optionDiv.innerHTML = `
+                <input type="radio" id="option${index}" name="answer" value="${index}">
+                <label for="option${index}">
+                    <span class="symbol">${symbols[index]}</span>
+                    <span class="text">${option}</span>
+                </label>
+            `;
+            optionDiv.addEventListener('click', () => selectOption(index, optionDiv));
+            optionsContainer.appendChild(optionDiv);
+        });
+    }
 
     // UI 초기화
     resultSection.style.display = 'none';
@@ -200,7 +182,7 @@ function checkAnswer() {
     }
 
     answered = true;
-    const question = questions[currentQuestionIndex];
+    const question = filteredQuestions[currentQuestionIndex];
     const isCorrect = selectedAnswer === question.answer;
 
     // 점수 계산
@@ -219,6 +201,7 @@ function checkAnswer() {
 // 결과 표시
 function showResult(isCorrect, question) {
     resultSection.style.display = 'block';
+    const symbols = ['①', '②', '③', '④'];
 
     // 결과 메시지
     if (isCorrect) {
@@ -229,22 +212,11 @@ function showResult(isCorrect, question) {
         resultMessage.textContent = '✗ 오답입니다.';
     }
 
-    // 정답 표시
-    const correctOptionLabel = question.answer + 1;
-    const categoryClass = question.category ? question.category.replace(/\s+/g, '-') : 'default';
-    
-    let resultHTML = `<strong>정답:</strong> ${correctOptionLabel}. ${question.options[question.answer]}`;
+    // 정답 및 설명 표시
+    const correctOptionLabel = symbols[question.answer];
+    let resultHTML = `<strong>정답:</strong> ${correctOptionLabel} ${question.options[question.answer]}`;
 
-    // 단원명 표시
-    if (question.category) {
-        resultHTML += `
-            <div style="margin-top: 10px;">
-                <span class="category-badge ${categoryClass}">${question.category}</span>
-            </div>
-        `;
-    }
-
-    // 설명 표시 (example.json에서 가져온 설명)
+    // 설명 표시
     if (question.explanation && question.explanation.trim()) {
         resultHTML += `
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #cbd5e0;">
@@ -262,7 +234,7 @@ function showResult(isCorrect, question) {
 
 // 진행 상황 업데이트
 function updateProgress() {
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+    const progress = ((currentQuestionIndex + 1) / filteredQuestions.length) * 100;
     progressFill.style.width = progress + '%';
 }
 
@@ -274,18 +246,17 @@ function nextQuestion() {
 
 // 완료 화면 표시
 function showCompletionScreen() {
-    // 메인 컨텐츠 숨기기
-    document.querySelector('.quiz-container').innerHTML = '';
-    document.querySelector('.quiz-container').appendChild(completionSection);
     completionSection.style.display = 'block';
+    submitBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
 
     // 최종 점수 표시
     finalScoreEl.textContent = score;
-    const percent = Math.round((score / questions.length) * 100);
+    const percent = Math.round((score / filteredQuestions.length) * 100);
     scorePercentEl.textContent = percent;
 
-    // 헤더 숨기기
-    document.querySelector('.progress-section').style.display = 'none';
+    // 스크롤
+    completionSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // 처음부터 시작
@@ -296,48 +267,9 @@ function restartQuiz() {
     answered = false;
 
     // UI 초기화
-    document.querySelector('.progress-section').style.display = 'block';
     completionSection.style.display = 'none';
-    
-    // 컨테이너 다시 구성
-    const quizContainer = document.querySelector('.quiz-container');
-    quizContainer.innerHTML = `
-        <div class="question-card">
-            <div class="question-number" id="questionNumber">문제 1</div>
-            <div class="question-text" id="questionText">로딩 중...</div>
-            
-            <div class="options-section">
-                <div class="options" id="optionsContainer"></div>
-            </div>
-
-            <div class="result-section" id="resultSection" style="display:none;">
-                <div class="result-message" id="resultMessage"></div>
-                <div class="correct-answer" id="correctAnswer"></div>
-            </div>
-        </div>
-
-        <div class="button-group">
-            <button class="btn btn-submit" id="submitBtn">채점하기</button>
-            <button class="btn btn-next" id="nextBtn" style="display:none;">다음 문제</button>
-        </div>
-    `;
-    
-    // DOM 요소 재할당
-    const newSubmitBtn = document.getElementById('submitBtn');
-    const newNextBtn = document.getElementById('nextBtn');
-    
-    newSubmitBtn.addEventListener('click', checkAnswer);
-    newNextBtn.addEventListener('click', nextQuestion);
-    
-    // 전역 변수 업데이트
-    submitBtn = newSubmitBtn;
-    nextBtn = newNextBtn;
-    optionsContainer = document.getElementById('optionsContainer');
-    questionNumberEl = document.getElementById('questionNumber');
-    questionTextEl = document.getElementById('questionText');
-    resultSection = document.getElementById('resultSection');
-    resultMessage = document.getElementById('resultMessage');
-    correctAnswerEl = document.getElementById('correctAnswer');
+    submitBtn.style.display = 'block';
+    nextBtn.style.display = 'none';
     
     displayQuestion();
 }

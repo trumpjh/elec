@@ -303,7 +303,7 @@
     },
     {
       "number": 44,
-      "question": "교류 송전 방식의 장점이 아닌 것은?",
+      "question": "교류 송전 방식의 장점이 아닌 것은?\n\n<table class=\"problem-table\">\n<tr><td>\n보기<br>㉠ 화약고 등의 위험 장소<br>㉡ 부식성 가스가 있는 장소<br>㉢ 위험물 등이 존재하는 장소<br>㉣ 불연성 먼지가 많은 장소<br>㉤ 습기가 많은 장소\n</td></tr>\n</table>",
       "options": [
         "전압의 변환이 용이해 전력 전송을 합리적이고 경제적으로 운영할 수 있다.",
         "교류 발전기는 직류 발전기보다 구조가 간단하고, 효율이 좋으며, 3상 방식에서 회전 자기장을 쉽게 얻을 수 있다.",
@@ -468,7 +468,7 @@
     },
     {
       "number": 60,
-      "question": "다음 보기 중 금속관, 애자, 합성수지관 및 케이블 공사가 모두 가능한 특수 장소를 옳게 나열한 것은?\n\n㉠ 화약고 등의 위험 장소\n㉡ 부식성 가스가 있는 장소\n㉢ 위험물 등이 존재하는 장소\n㉣ 불연성 먼지가 많은 장소\n㉤ 습기가 많은 장소",
+      "question": "다음 보기 중 금속관, 애자, 합성수지관 및 케이블 공사가 모두 가능한 특수 장소를 옳게 나열한 것은?\n\n<table class=\"problem-table\"><tr><td>보기<br>㉠ 화약고 등의 위험 장소<br>㉡ 부식성 가스가 있는 장소<br>㉢ 위험물 등이 존재하는 장소<br>㉣ 불연성 먼지가 많은 장소<br>㉤ 습기가 많은 장소</td></tr></table>",
       "options": [
         "㉠, ㉡, ㉢",
         "㉠, ㉣, ㉤",
@@ -858,7 +858,7 @@
     },
     {
       "number": 55,
-      "question": "자기저항은 자기 회로의 길이에 (  ⓐ  )하고 자로의 단면적과 투자율의 곱에 (   ⓑ   )한다.\n\n위 빈칸 ⓐ, ⓑ에 들어갈 내용으로 알맞은 것은?",
+      "question": "<table class=\"problem-table\"><tr><td>자기저항은 자기 회로의 길이에 (  ⓐ  )하고 자로의 단면적과 투자율의 곱에 (   ⓑ   )한다.</td></tr></table>\n\n위 빈칸 ⓐ, ⓑ에 들어갈 내용으로 알맞은 것은?",
       "options": [
         "ⓐ 비례     ⓑ 반비례",
         "ⓐ 반비례   ⓑ 비례",
@@ -873,7 +873,7 @@
     },
     {
       "number": 58,
-      "question": "\"2차 전지의 대표적인 것으로 납축전지가 있다. 전해액으로 비중 약(  ㉠  ) 정도의 (  ㉡  )을 사용한다.\"\n\n위 빈칸 ㉠, ㉡에 들어갈 내용으로 알맞은 것은?",
+      "question": "<table class=\"problem-table\"><tr><td>\"2차 전지의 대표적인 것으로 납축전지가 있다. 전해액으로 비중 약(  ㉠  ) 정도의 (  ㉡  )을 사용한다.\"</td></tr></table>\n\n위 빈칸 ㉠, ㉡에 들어갈 내용으로 알맞은 것은?",
       "options": [
         "㉠1.15 ~ 1.21  ㉡ 묽은 황산",
         "㉠1.25 ~ 1.36  ㉡ 질산",
@@ -897,7 +897,7 @@
       ],
       "answer": 2,
       "exam": "제3회",
-      "explanation": "전기설비",
+      "explanation": "전기설비\n\n<div style=\"margin-top: 1.5rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;\">\n<div style=\"text-align: center;\">\n<strong>a) 접점</strong><br><img src=\"images/제3회_59_a.png\" alt=\"a접점\" style=\"max-width: 300px; max-height: 300px; border-radius: 6px; margin-top: 0.5rem;\">\n</div>\n<div style=\"text-align: center;\">\n<strong>b) 접점</strong><br><img src=\"images/제3회_59_b.png\" alt=\"b접점\" style=\"max-width: 300px; max-height: 300px; border-radius: 6px; margin-top: 0.5rem;\">\n</div>\n</div>",
       "image": "images/제3회_59.png",
       "category": "전기설비"
     },

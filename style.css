@@ -592,3 +592,32 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #999;
 }
+
+/* ============================================================
+   문제의 HTML 테이블 스타일
+   ============================================================ */
+
+.problem-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.problem-table td {
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    line-height: 1.8;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.problem-detail-question {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}

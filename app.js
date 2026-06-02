@@ -141,7 +141,8 @@ class QuestionApp {
         // 문제 정보
         document.getElementById('detailNumber').textContent = q.number;
         document.getElementById('detailExam').textContent = q.exam;
-        document.getElementById('detailQuestion').textContent = q.question;
+        // innerHTML을 사용하여 HTML 테이블 렌더링 지원
+        document.getElementById('detailQuestion').innerHTML = q.question;
 
         // 문제 이미지 처리
         const problemImageEl = document.getElementById('problemImage');

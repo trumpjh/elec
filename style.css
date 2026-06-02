@@ -1,3 +1,7 @@
+/* ============================================================
+   전기기능사 문제풀이 시스템 - CSS 스타일시트
+   ============================================================ */
+
 * {
     margin: 0;
     padding: 0;
@@ -5,484 +9,566 @@
 }
 
 :root {
-    --primary-color: #667eea;
-    --secondary-color: #764ba2;
-    --success-color: #48bb78;
-    --danger-color: #f56565;
-    --warning-color: #ed8936;
-    --light-bg: #f7fafc;
-    --white: #ffffff;
-    --dark-text: #2d3748;
-    --light-text: #718096;
-    --category-electrical-theory: #3182ce;
-    --category-electrical-machine: #d69e2e;
-    --category-electrical-equipment: #c53030;
+    --primary-color: #2196F3;
+    --secondary-color: #4CAF50;
+    --danger-color: #f44336;
+    --warning-color: #ff9800;
+    --success-color: #4CAF50;
+    --bg-color: #f5f5f5;
+    --text-color: #333;
+    --border-color: #ddd;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    min-height: 100vh;
-    padding: 20px;
-    color: var(--dark-text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
 }
+
+/* ============================================================
+   컨테이너 및 레이아웃
+   ============================================================ */
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* 카테고리 선택 */
-.category-section {
-    background: var(--white);
-    border-radius: 15px;
-    padding: 15px 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: slideUp 0.6s ease-out both;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.category-section label {
-    font-weight: 600;
-    color: var(--dark-text);
-}
-
-.category-section select {
-    padding: 8px 12px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: var(--light-bg);
-    color: var(--dark-text);
-}
-
-.category-section select:hover,
-.category-section select:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
-
-/* 헤더 */
 .header {
+    background: linear-gradient(135deg, var(--primary-color), #1976D2);
+    color: white;
+    padding: 2rem;
     text-align: center;
-    color: var(--white);
-    margin-bottom: 40px;
-    animation: slideDown 0.6s ease-out;
+    box-shadow: var(--shadow);
 }
 
 .header h1 {
     font-size: 2.5rem;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
     font-weight: 700;
 }
 
-.header .subtitle {
+.subtitle {
     font-size: 1rem;
-    opacity: 0.95;
-    font-weight: 300;
+    opacity: 0.9;
 }
 
-/* 진행 상황 */
-.progress-section {
-    background: var(--white);
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    animation: slideUp 0.6s ease-out 0.1s both;
-}
-
-.progress-bar {
+.main-content {
+    display: flex;
+    flex: 1;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
     width: 100%;
-    height: 10px;
-    background: #e2e8f0;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 15px;
 }
 
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    border-radius: 10px;
-    width: 6.25%;
-    transition: width 0.4s ease;
+/* ============================================================
+   사이드바
+   ============================================================ */
+
+.sidebar {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.progress-text {
-    text-align: center;
-    color: var(--light-text);
-    font-weight: 600;
+.menu-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.menu-section h3 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+/* ============================================================
+   버튼 스타일
+   ============================================================ */
+
+.exam-buttons,
+.category-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.exam-btn,
+.category-btn,
+.problem-item-btn {
+    background: white;
+    border: 2px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
     font-size: 0.95rem;
 }
 
-/* 퀴즈 컨테이너 */
-.quiz-container {
-    animation: slideUp 0.6s ease-out 0.2s both;
+.exam-btn:hover,
+.category-btn:hover,
+.problem-item-btn:hover {
+    border-color: var(--primary-color);
+    background-color: #f0f7ff;
 }
 
-/* 문제 카드 */
-.question-card {
-    background: var(--white);
-    border-radius: 15px;
-    padding: 40px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.4s ease-out 0.3s both;
+.exam-btn.active,
+.category-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
 }
 
-.question-number {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--white);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    margin-bottom: 20px;
+.problem-item-btn {
+    padding: 0.5rem 0.75rem;
     font-size: 0.9rem;
 }
 
-.question-number.electrical-theory {
-    background: linear-gradient(135deg, #3182ce, #2c5aa0);
-}
-
-.question-number.electrical-machine {
-    background: linear-gradient(135deg, #d69e2e, #b7791f);
-}
-
-.question-number.electrical-equipment {
-    background: linear-gradient(135deg, #c53030, #9b2c2c);
-}
-
-.category-badge {
-    display: inline-block;
-    font-size: 0.8rem;
-    padding: 4px 8px;
-    border-radius: 4px;
-    margin-left: 8px;
-    font-weight: 600;
-}
-
-.category-badge.electrical-theory {
-    background: rgba(49, 130, 206, 0.2);
-    color: #3182ce;
-}
-
-.category-badge.electrical-machine {
-    background: rgba(214, 158, 46, 0.2);
-    color: #d69e2e;
-}
-
-.category-badge.electrical-equipment {
-    background: rgba(197, 48, 48, 0.2);
-    color: #c53030;
-}
-
-.question-text {
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    color: var(--dark-text);
-    line-height: 1.6;
-}
-
-/* 선택지 */
-.options-section {
-    margin: 30px 0;
-}
-
-.options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.option {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: var(--light-bg);
-}
-
-.option:hover {
-    border-color: var(--primary-color);
-    background: #f0f4ff;
-}
-
-.option input[type="radio"] {
-    width: 20px;
-    height: 20px;
-    margin-right: 15px;
-    cursor: pointer;
-    accent-color: var(--primary-color);
-}
-
-.option label {
-    flex: 1;
-    cursor: pointer;
-    font-size: 1.05rem;
-    font-weight: 500;
-}
-
-.option.selected {
-    border-color: var(--primary-color);
-    background: #f0f4ff;
-}
-
-/* 결과 섹션 */
-.result-section {
-    margin-top: 30px;
-    padding: 20px;
-    border-radius: 10px;
-    animation: slideUp 0.4s ease-out;
-}
-
-.result-message {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.result-message.correct {
-    background: #c6f6d5;
+.problem-item-btn.solved {
+    background-color: #e8f5e9;
+    border-color: var(--success-color);
     color: var(--success-color);
 }
 
-.result-message.incorrect {
-    background: #fed7d7;
-    color: var(--danger-color);
+.problem-item-btn.solved::before {
+    content: "✓ ";
 }
 
-.correct-answer {
-    background: #edf2f7;
-    padding: 15px;
-    border-left: 4px solid var(--primary-color);
-    border-radius: 5px;
+/* ============================================================
+   문제 목록
+   ============================================================ */
+
+.problem-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.problem-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.problem-list::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+.problem-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.problem-list::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* ============================================================
+   통계
+   ============================================================ */
+
+.stats {
+    background: linear-gradient(135deg, #f0f7ff, #e3f2fd);
+    border-top: 3px solid var(--primary-color);
+}
+
+.stat-info {
     font-size: 0.95rem;
-    color: var(--dark-text);
 }
 
-/* 버튼 */
-.button-group {
+.stat-info > div {
+    margin: 0.5rem 0;
     display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-    animation: slideUp 0.6s ease-out 0.4s both;
+    justify-content: space-between;
 }
 
-.btn {
-    flex: 1;
-    padding: 14px 30px;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.05rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.btn-submit {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--white);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-.btn-submit:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
-}
-
-.btn-submit:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-next {
-    background: var(--success-color);
-    color: var(--white);
-    box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
-}
-
-.btn-next:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(72, 187, 120, 0.5);
-}
-
-.btn-restart {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--white);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-.btn-restart:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
-}
-
-/* 완료 섹션 */
-.completion-section {
-    background: var(--white);
-    border-radius: 15px;
-    padding: 50px 40px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    animation: zoomIn 0.5s ease-out;
-}
-
-.completion-section h2 {
-    font-size: 2rem;
-    margin-bottom: 30px;
-    color: var(--dark-text);
-}
-
-.final-score {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--white);
-    padding: 30px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-}
-
-.score-text {
-    font-size: 1rem;
-    opacity: 0.95;
-    margin-bottom: 10px;
-}
-
-.score-number {
-    font-size: 3rem;
+.stat-info span {
     font-weight: 700;
-    margin-bottom: 10px;
+    color: var(--primary-color);
 }
 
-.score-percent {
-    font-size: 1.5rem;
-    opacity: 0.9;
+/* ============================================================
+   메인 콘텐츠
+   ============================================================ */
+
+.content {
+    flex: 1;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    min-height: 600px;
 }
 
-/* 푸터 */
-.footer {
+.loading {
     text-align: center;
-    color: var(--white);
-    padding: 30px 0;
-    opacity: 0.9;
+    padding: 2rem;
+    color: #999;
 }
 
-/* 애니메이션 */
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.loading p {
+    font-size: 1.2rem;
 }
 
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* ============================================================
+   문제 컨테이너
+   ============================================================ */
+
+.problem-container {
+    text-align: center;
+}
+
+.problem-container.welcome {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+}
+
+.welcome-text {
+    text-align: center;
+}
+
+.welcome-text h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.welcome-text p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================================
+   문제 상세 정보
+   ============================================================ */
+
+.problem-detail {
+    animation: fadeIn 0.3s ease-in;
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
-@keyframes zoomIn {
+.problem-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.problem-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.problem-exam {
+    background: linear-gradient(135deg, var(--primary-color), #1976D2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ============================================================
+   문제 텍스트
+   ============================================================ */
+
+.problem-text {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--primary-color);
+    line-height: 1.8;
+    font-size: 1.1rem;
+    text-align: left;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+/* ============================================================
+   선택지
+   ============================================================ */
+
+.options-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.option {
+    background: #f9f9f9;
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.option:hover {
+    background: #f0f7ff;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.option-symbol {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    min-width: 30px;
+}
+
+.option-text {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.option.selected {
+    background: #e3f2fd;
+    border-color: var(--primary-color);
+    border-width: 3px;
+}
+
+.option.correct {
+    background: #e8f5e9;
+    border-color: var(--success-color);
+    border-width: 3px;
+}
+
+.option.incorrect {
+    background: #ffebee;
+    border-color: var(--danger-color);
+    border-width: 3px;
+}
+
+/* ============================================================
+   결과
+   ============================================================ */
+
+.result-container {
+    animation: slideUp 0.4s ease;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color);
+}
+
+@keyframes slideUp {
     from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0);
     }
 }
 
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-    .header h1 {
-        font-size: 2rem;
-    }
+.result {
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
 
-    .question-card {
-        padding: 25px;
-    }
+.result.correct {
+    background: #e8f5e9;
+    color: var(--success-color);
+    border-left: 4px solid var(--success-color);
+}
 
-    .question-text {
-        font-size: 1.2rem;
-    }
+.result.incorrect {
+    background: #ffebee;
+    color: var(--danger-color);
+    border-left: 4px solid var(--danger-color);
+}
 
-    .button-group {
+/* ============================================================
+   설명
+   ============================================================ */
+
+.explanation {
+    background: #fffacd;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--warning-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.explanation-title {
+    font-weight: 700;
+    color: var(--warning-color);
+    margin-bottom: 0.5rem;
+}
+
+.explanation-content {
+    color: #333;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ============================================================
+   네비게이션 버튼
+   ============================================================ */
+
+.navigation {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.nav-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: #1976D2;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.nav-btn:active {
+    transform: translateY(0);
+}
+
+.nav-btn.reset {
+    background: var(--secondary-color);
+}
+
+.nav-btn.reset:hover {
+    background: #45a049;
+}
+
+.nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   반응형 디자인
+   ============================================================ */
+
+@media (max-width: 1200px) {
+    .main-content {
         flex-direction: column;
+        gap: 1rem;
     }
 
-    .btn {
+    .sidebar {
         width: 100%;
     }
 
-    .completion-section {
-        padding: 30px 20px;
-    }
-
-    .score-number {
-        font-size: 2.5rem;
+    .problem-list {
+        grid-template-columns: repeat(4, 1fr);
+        max-height: none;
     }
 }
 
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-
+@media (max-width: 768px) {
     .header h1 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
-    .header .subtitle {
-        font-size: 0.9rem;
+    .options-container {
+        grid-template-columns: 1fr;
     }
 
-    .question-card {
-        padding: 15px;
+    .problem-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
 
-    .question-text {
-        font-size: 1.1rem;
+    .menu-section {
+        padding: 1rem;
     }
 
-    .option {
-        padding: 12px;
+    .exam-buttons,
+    .category-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .option label {
-        font-size: 0.95rem;
+    .problem-list {
+        grid-template-columns: repeat(3, 1fr);
     }
+
+    .navigation {
+        flex-direction: column;
+    }
+
+    .nav-btn {
+        width: 100%;
+    }
+}
+
+/* ============================================================
+   스크롤바 커스텀
+   ============================================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }

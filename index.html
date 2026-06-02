@@ -3,96 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ 전기기능사 기출문제 풀이</title>
+    <title>전기기능사 문제풀이 | 2025년도</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <!-- 헤더 -->
         <header class="header">
-            <h1>⚡ 전기기능사 기출문제 풀이</h1>
-            <p class="subtitle">2025년도 제1회</p>
+            <h1>⚡ 전기기능사 문제풀이 시스템</h1>
+            <p class="subtitle">2025년도 문제집</p>
         </header>
 
-        <!-- 카테고리 및 회차 선택 -->
-        <div class="category-section">
-            <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
-                <div>
-                    <label for="examSelect" style="font-weight: 600;">회차 선택:</label>
-                    <select id="examSelect" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
-                        <option value="all">전체 회차 (75개)</option>
-                        <option value="제1회">제1회 (32개)</option>
-                        <option value="제2회">제2회 (16개)</option>
-                        <option value="제3회">제3회 (12개)</option>
-                        <option value="제4회">제4회 (15개)</option>
-                    </select>
+        <!-- 메인 콘텐츠 -->
+        <main class="main-content">
+            <!-- 좌측 메뉴 -->
+            <aside class="sidebar">
+                <div class="menu-section">
+                    <h3>📋 회차 선택</h3>
+                    <div class="exam-buttons">
+                        <button class="exam-btn active" data-exam="all">전체</button>
+                        <button class="exam-btn" data-exam="제1회">제1회 (32문)</button>
+                        <button class="exam-btn" data-exam="제2회">제2회 (16문)</button>
+                        <button class="exam-btn" data-exam="제3회">제3회 (12문)</button>
+                        <button class="exam-btn" data-exam="제4회">제4회 (15문)</button>
+                    </div>
                 </div>
-                
-                <div>
-                    <label for="categorySelect" style="font-weight: 600;">단원 선택:</label>
-                    <select id="categorySelect" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
-                        <option value="all">전체 (모든 문제)</option>
-                        <option value="전기이론">전기이론</option>
-                        <option value="전기기기">전기기기</option>
-                        <option value="전기설비">전기설비</option>
-                    </select>
+
+                <div class="menu-section">
+                    <h3>📚 단원 선택</h3>
+                    <div class="category-buttons">
+                        <button class="category-btn active" data-category="all">전체</button>
+                        <button class="category-btn" data-category="전기설비">전기설비</button>
+                        <button class="category-btn" data-category="전기기기">전기기기</button>
+                        <button class="category-btn" data-category="전기공학">전기공학</button>
+                        <button class="category-btn" data-category="기타">기타</button>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- 진행 상황 -->
-        <div class="progress-section">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <p class="progress-text">
-                <span id="currentQuestion">1</span> / <span id="totalQuestions">16</span>
-            </p>
-        </div>
-
-        <!-- 메인 컨텐츠 -->
-        <main class="quiz-container">
-            <!-- 문제 카드 -->
-            <div class="question-card">
-                <div class="question-number" id="questionNumber">문제 1</div>
-                <div class="question-text" id="questionText">로딩 중...</div>
-                
-                <!-- 선택지 -->
-                <div class="options-section">
-                    <div class="options" id="optionsContainer">
+                <div class="menu-section">
+                    <h3>📊 문제 목록</h3>
+                    <div class="problem-list" id="problemList">
                         <!-- JavaScript로 동적 생성 -->
                     </div>
                 </div>
 
-                <!-- 채점 결과 -->
-                <div class="result-section" id="resultSection" style="display:none;">
-                    <div class="result-message" id="resultMessage"></div>
-                    <div class="correct-answer" id="correctAnswer"></div>
+                <div class="menu-section stats">
+                    <h3>📈 통계</h3>
+                    <div class="stat-info">
+                        <div>총 문제: <span id="totalProblems">0</span></div>
+                        <div>풀이한: <span id="solvedProblems">0</span></div>
+                        <div>정답률: <span id="correctRate">0%</span></div>
+                    </div>
                 </div>
-            </div>
+            </aside>
 
-            <!-- 버튼 -->
-            <div class="button-group">
-                <button class="btn btn-submit" id="submitBtn">채점하기</button>
-                <button class="btn btn-next" id="nextBtn" style="display:none;">다음 문제</button>
-            </div>
-
-            <!-- 완료 메시지 -->
-            <div class="completion-section" id="completionSection" style="display:none;">
-                <h2>모든 문제를 풀었습니다! 🎉</h2>
-                <div class="final-score">
-                    <p class="score-text">최종 성적</p>
-                    <p class="score-number"><span id="finalScore">0</span> / 16</p>
-                    <p class="score-percent"><span id="scorePercent">0</span>%</p>
+            <!-- 우측 콘텐츠 -->
+            <section class="content">
+                <!-- 문제 내용 -->
+                <div class="problem-container" id="problemContainer">
+                    <div class="loading">
+                        <p>📚 문제를 불러오는 중...</p>
+                    </div>
                 </div>
-                <button class="btn btn-restart" id="restartBtn">처음부터 시작</button>
-            </div>
+
+                <!-- 문제 상세 정보 -->
+                <div class="problem-detail" id="problemDetail" style="display: none;">
+                    <!-- 문제 정보 -->
+                    <div class="problem-header">
+                        <div class="problem-number">문제 <span id="detailNumber">0</span></div>
+                        <div class="problem-exam">
+                            <span id="detailExam">제1회</span>
+                        </div>
+                    </div>
+
+                    <!-- 문제 텍스트 -->
+                    <div class="problem-text" id="detailQuestion">
+                        <!-- JavaScript로 설정 -->
+                    </div>
+
+                    <!-- 선택지 -->
+                    <div class="options-container">
+                        <div class="option" data-index="0">
+                            <span class="option-symbol">①</span>
+                            <span class="option-text" id="option0"><!-- JavaScript로 설정 --></span>
+                        </div>
+                        <div class="option" data-index="1">
+                            <span class="option-symbol">②</span>
+                            <span class="option-text" id="option1"><!-- JavaScript로 설정 --></span>
+                        </div>
+                        <div class="option" data-index="2">
+                            <span class="option-symbol">③</span>
+                            <span class="option-text" id="option2"><!-- JavaScript로 설정 --></span>
+                        </div>
+                        <div class="option" data-index="3">
+                            <span class="option-symbol">④</span>
+                            <span class="option-text" id="option3"><!-- JavaScript로 설정 --></span>
+                        </div>
+                    </div>
+
+                    <!-- 결과 표시 -->
+                    <div class="result-container" id="resultContainer" style="display: none;">
+                        <div class="result" id="resultMessage">
+                            <!-- JavaScript로 설정 -->
+                        </div>
+
+                        <!-- 설명 -->
+                        <div class="explanation" id="explanation">
+                            <!-- JavaScript로 설정 -->
+                        </div>
+
+                        <!-- 네비게이션 -->
+                        <div class="navigation">
+                            <button id="prevBtn" class="nav-btn">← 이전</button>
+                            <button id="nextBtn" class="nav-btn">다음 →</button>
+                            <button id="resetBtn" class="nav-btn reset">다시 풀기</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
-
-        <!-- 푸터 -->
-        <footer class="footer">
-            <p>2025년도 제1회 전기기능사 필기시험 기출문제</p>
-        </footer>
     </div>
 
     <script src="app.js"></script>

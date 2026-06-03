@@ -59,13 +59,48 @@ class QuestionExtractor:
                 
                 # 선택지 추출 (다음 문단에서)
                 options = []
-                if i + 1 < len(paragraphs):
-                    next_para = paragraphs[i + 1]
+                next_para_idx = i + 1
+                
+                # 방법 1: 다음 문단에 모든 선택지가 있는 경우
+                if next_para_idx < len(paragraphs):
+                    next_para = paragraphs[next_para_idx]
                     
-                    # 정규식으로 선택지 추출
-                    option_pattern = r'[①②③④]\s*([^①②③④]+?)(?=[①②③④]|$)'
-                    matches = re.findall(option_pattern, next_para)
-                    options = [m.strip() for m in matches if m.strip()]
+                    # 더 정교한 정규식: 첫 선택지가 심볼 없을 수도 있음
+                    # 패턴: ② 옵션2 ③ 옵션3 ④ 옵션4 (첫 옵션은 심볼 없음)
+                    if '②' in next_para or '③' in next_para:
+                        # 첫 번째 옵션은 문단의 시작부터 ②까지
+                        first_option = re.split(r'[②③④]', next_para)[0].strip()
+                        
+                        # 나머지 옵션들 추출
+                        option_pattern = r'[②③④]\s*([^②③④]+?)(?=[②③④]|$)'
+                        rest_matches = re.findall(option_pattern, next_para)
+                        rest_options = [m.strip() for m in rest_matches if m.strip()]
+                        
+                        if first_option:
+                            options = [first_option] + rest_options
+                    else:
+                        # 일반적인 경우: 모든 옵션이 심볼로 시작
+                        option_pattern = r'[①②③④]\s*([^①②③④]+?)(?=[①②③④]|$)'
+                        matches = re.findall(option_pattern, next_para)
+                        options = [m.strip() for m in matches if m.strip()]
+                
+                # 방법 2: 선택지가 개별 문단인 경우 (방법 1에서 못 찾은 경우)
+                if len(options) < 4 and next_para_idx < len(paragraphs):
+                    # 다음 4개 문단에서 선택지 수집
+                    collected_options = {}
+                    for offset in range(1, 5):
+                        if next_para_idx + offset - 1 < len(paragraphs):
+                            para = paragraphs[next_para_idx + offset - 1]
+                            # 각 문단이 "①", "②", "③", "④" 중 하나로 시작하는지 확인
+                            for symbol, idx in {'①': 0, '②': 1, '③': 2, '④': 3}.items():
+                                if para.startswith(symbol):
+                                    # 심볼 제거하고 선택지 저장
+                                    option_text = para[1:].strip()
+                                    collected_options[idx] = option_text
+                    
+                    # 4개 모두 수집했으면 사용
+                    if len(collected_options) == 4:
+                        options = [collected_options[i] for i in range(4)]
                 
                 if len(options) != 4:
                     print(f"   ⚠️  경고: 문제 {problem_num}의 선택지가 {len(options)}개 (4개 필요)")

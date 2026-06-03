@@ -238,6 +238,14 @@ class QuestionApp {
         } else {
             explanationHTML += '<div class="explanation-content">설명이 준비 중입니다.</div>';
         }
+        
+        // 설명 이미지
+        if (q.explanation_image) {
+            explanationHTML += `<div style="margin-top: 15px; text-align: center;">
+                <img src="${q.explanation_image}" alt="설명 이미지" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; padding: 5px;">
+            </div>`;
+        }
+        
         explanationDiv.innerHTML = explanationHTML;
 
         resultContainer.style.display = 'block';

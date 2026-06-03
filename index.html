@@ -19,13 +19,19 @@
             <!-- 좌측 메뉴 -->
             <aside class="sidebar">
                 <div class="menu-section">
+                    <h3>� 년도 선택</h3>
+                    <div class="year-buttons" id="yearButtons">
+                        <button class="year-btn active" data-year="2025">2025년</button>
+                        <button class="year-btn" data-year="2024">2024년</button>
+                        <button class="year-btn" data-year="2023">2023년</button>
+                    </div>
+                </div>
+
+                <div class="menu-section">
                     <h3>📋 회차 선택</h3>
-                    <div class="exam-buttons">
+                    <div class="exam-buttons" id="examButtons">
                         <button class="exam-btn active" data-exam="all">전체</button>
-                        <button class="exam-btn" data-exam="제1회">제1회 (32문)</button>
-                        <button class="exam-btn" data-exam="제2회">제2회 (38문)</button>
-                        <button class="exam-btn" data-exam="제3회">제3회 (37문)</button>
-                        <button class="exam-btn" data-exam="제4회">제4회 (36문)</button>
+                        <!-- 동적으로 생성됨 -->
                     </div>
                 </div>
 

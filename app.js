@@ -8,6 +8,7 @@ class QuestionApp {
         this.filteredQuestions = [];
         this.currentQuestionIndex = 0;
         this.selectedAnswers = {};
+        this.currentYear = 2025;
         this.currentExam = 'all';
         this.currentCategory = 'all';
         this.init();
@@ -16,6 +17,9 @@ class QuestionApp {
     async init() {
         // 데이터 로드
         await this.loadQuestions();
+        
+        // 회차 버튼 동적 생성
+        this.generateExamButtons();
         
         // 이벤트 리스너 등록
         this.setupEventListeners();
@@ -38,15 +42,20 @@ class QuestionApp {
     }
 
     setupEventListeners() {
-        // 회차 선택
-        document.querySelectorAll('.exam-btn').forEach(btn => {
+        // 년도 선택
+        document.querySelectorAll('.year-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.exam-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                this.currentExam = e.target.dataset.exam;
+                this.currentYear = parseInt(e.target.dataset.year);
+                this.generateExamButtons();
+                this.currentExam = 'all';
                 this.filterQuestions();
             });
         });
+
+        // 회차 선택 (동적으로 등록)
+        this.setupExamButtonListeners();
 
         // 단원 선택
         document.querySelectorAll('.category-btn').forEach(btn => {
@@ -71,11 +80,56 @@ class QuestionApp {
         document.getElementById('resetBtn')?.addEventListener('click', () => this.resetQuestion());
     }
 
+    setupExamButtonListeners() {
+        // 회차 선택
+        document.querySelectorAll('.exam-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.exam-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.currentExam = e.target.dataset.exam;
+                this.filterQuestions();
+            });
+        });
+    }
+
+    generateExamButtons() {
+        // 선택된 년도의 모든 문제 필터링
+        const yearQuestions = this.allQuestions.filter(q => q.year === this.currentYear);
+        
+        // 회차별로 문제 수 계산
+        const examCounts = {};
+        yearQuestions.forEach(q => {
+            if (!examCounts[q.exam]) {
+                examCounts[q.exam] = 0;
+            }
+            examCounts[q.exam]++;
+        });
+        
+        // 회차 목록 (순서 유지)
+        const exams = ['제1회', '제2회', '제3회', '제4회'].filter(exam => examCounts[exam]);
+        
+        // 버튼 생성
+        const examButtonsContainer = document.getElementById('examButtons');
+        examButtonsContainer.innerHTML = '<button class="exam-btn active" data-exam="all">전체</button>';
+        
+        exams.forEach(exam => {
+            const btn = document.createElement('button');
+            btn.className = 'exam-btn';
+            btn.dataset.exam = exam;
+            btn.textContent = `${exam} (${examCounts[exam]}문)`;
+            examButtonsContainer.appendChild(btn);
+        });
+        
+        // 이벤트 리스너 재등록
+        this.setupExamButtonListeners();
+    }
+
     filterQuestions() {
         this.filteredQuestions = this.allQuestions.filter(q => {
+            const yearMatch = q.year === this.currentYear;
             const examMatch = this.currentExam === 'all' || q.exam === this.currentExam;
             const categoryMatch = this.currentCategory === 'all' || q.category === this.currentCategory;
-            return examMatch && categoryMatch;
+            return yearMatch && examMatch && categoryMatch;
         });
 
         this.currentQuestionIndex = 0;
